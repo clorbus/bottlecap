@@ -6,44 +6,141 @@ import { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
-const images = [
-  'red.svg',
-  'sienna.svg',
-  'violet.svg',
-  'white.svg',
-  'yellow.svg',
-  'gray.svg',
-  'orange.svg',
-  'peach.svg',
-  'pink.svg',
-  'purple.svg',
-  'black.svg',
-  'blue.svg',
-  'brown.svg',
-  'cyan.svg',
-  'beige.svg'
-];
+interface Bottlecap {
+  id: string;
+  frontImage: string;
+  backImage: string;
+  color: string;
+  description: string;
+  funFact: string;
+}
 
-const funFacts = [
-  "The color red can increase your heart rate and blood pressure!",
-  "Sienna is named after the Italian city of Siena, where the pigment was originally produced.",
-  "Violet is the color of royalty and was once the most expensive color to produce.",
-  "White light contains all the colors of the rainbow combined.",
-  "Yellow is the most visible color from a distance, which is why it's used for traffic signs.",
-  "Gray is considered a neutral color that can create a sense of calm and balance.",
-  "Orange is the only color named after a fruit, not the other way around!",
-  "Peach was first used as a color name in English in 1588.",
-  "Pink was considered a masculine color in the 1920s.",
-  "Purple was once so rare and expensive that only royalty could afford it.",
-  "Black isn't actually a color - it's the absence of light!",
-  "Blue is the world's favorite color, according to various global surveys.",
-  "Brown is the color of earth and wood, symbolizing stability and reliability.",
-  "Cyan is a primary color in the CMYK color model used in printing.",
-  "Beige is derived from the French word for natural wool that has been neither bleached nor dyed."
+const bottlecaps: Bottlecap[] = [
+  {
+    id: "red",
+    frontImage: "red.svg",
+    backImage: "red-back.svg",
+    color: "Red",
+    description: "A vibrant red bottlecap that catches the eye",
+    funFact: "The color red can increase your heart rate and blood pressure!"
+  },
+  {
+    id: "sienna",
+    frontImage: "sienna.svg",
+    backImage: "sienna-back.svg",
+    color: "Sienna",
+    description: "A warm, earthy sienna bottlecap",
+    funFact: "Sienna is named after the Italian city of Siena, where the pigment was originally produced."
+  },
+  {
+    id: "violet",
+    frontImage: "violet.svg",
+    backImage: "violet-back.svg",
+    color: "Violet",
+    description: "A rich purple bottlecap with royal elegance",
+    funFact: "Violet is the color of royalty and was once the most expensive color to produce."
+  },
+  {
+    id: "white",
+    frontImage: "white.svg",
+    backImage: "white-back.svg",
+    color: "White",
+    description: "A clean, pristine white bottlecap",
+    funFact: "White light contains all the colors of the rainbow combined."
+  },
+  {
+    id: "yellow",
+    frontImage: "yellow.svg",
+    backImage: "yellow-back.svg",
+    color: "Yellow",
+    description: "A bright, sunny yellow bottlecap",
+    funFact: "Yellow is the most visible color from a distance, which is why it's used for traffic signs."
+  },
+  {
+    id: "gray",
+    frontImage: "gray.svg",
+    backImage: "gray-back.svg",
+    color: "Gray",
+    description: "A sophisticated gray bottlecap",
+    funFact: "Gray is considered a neutral color that can create a sense of calm and balance."
+  },
+  {
+    id: "orange",
+    frontImage: "orange.svg",
+    backImage: "orange-back.svg",
+    color: "Orange",
+    description: "A vibrant orange bottlecap full of energy",
+    funFact: "Orange is the only color named after a fruit, not the other way around!"
+  },
+  {
+    id: "peach",
+    frontImage: "peach.svg",
+    backImage: "peach-back.svg",
+    color: "Peach",
+    description: "A soft, gentle peach bottlecap",
+    funFact: "Peach was first used as a color name in English in 1588."
+  },
+  {
+    id: "pink",
+    frontImage: "pink.svg",
+    backImage: "pink-back.svg",
+    color: "Pink",
+    description: "A playful pink bottlecap",
+    funFact: "Pink was considered a masculine color in the 1920s."
+  },
+  {
+    id: "purple",
+    frontImage: "purple.svg",
+    backImage: "purple-back.svg",
+    color: "Purple",
+    description: "A rich purple bottlecap with depth",
+    funFact: "Purple was once so rare and expensive that only royalty could afford it."
+  },
+  {
+    id: "black",
+    frontImage: "black.svg",
+    backImage: "black-back.svg",
+    color: "Black",
+    description: "A sleek, elegant black bottlecap",
+    funFact: "Black isn't actually a color - it's the absence of light!"
+  },
+  {
+    id: "blue",
+    frontImage: "blue.svg",
+    backImage: "blue-back.svg",
+    color: "Blue",
+    description: "A calming blue bottlecap",
+    funFact: "Blue is the world's favorite color, according to various global surveys."
+  },
+  {
+    id: "brown",
+    frontImage: "brown.svg",
+    backImage: "brown-back.svg",
+    color: "Brown",
+    description: "A warm, natural brown bottlecap",
+    funFact: "Brown is the color of earth and wood, symbolizing stability and reliability."
+  },
+  {
+    id: "cyan",
+    frontImage: "cyan.svg",
+    backImage: "cyan-back.svg",
+    color: "Cyan",
+    description: "A refreshing cyan bottlecap",
+    funFact: "Cyan is a primary color in the CMYK color model used in printing."
+  },
+  {
+    id: "beige",
+    frontImage: "beige.svg",
+    backImage: "beige-back.svg",
+    color: "Beige",
+    description: "A subtle, neutral beige bottlecap",
+    funFact: "Beige is derived from the French word for natural wool that has been neither bleached nor dyed."
+  }
 ];
 
 export default function Home() {
-  const gridImages = Array.from({ length: 144 }, (_, index) => images[index % images.length]);
+  // Create a grid of bottlecaps (12x12)
+  const gridBottlecaps = Array.from({ length: 144 }, (_, index) => bottlecaps[index % bottlecaps.length]);
   const [flippedStates, setFlippedStates] = useState<boolean[]>(Array(144).fill(false));
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isClosing, setIsClosing] = useState(false);
@@ -77,20 +174,18 @@ export default function Home() {
     const newStates = [...flippedStates];
     const allFlipped = newStates.every(state => state);
 
-    // Flip all tiles to the opposite state
     for (let i = 0; i < newStates.length; i++) {
       newStates[i] = !allFlipped;
     }
 
     setFlippedStates(newStates);
-    setTimeout(() => setIsFlippingAll(false), 1000); // Reset after animation completes
+    setTimeout(() => setIsFlippingAll(false), 1000);
   };
 
-  // Calculate delay based on position in the grid
   const getDelay = (index: number) => {
     const row = Math.floor(index / 12);
     const col = index % 12;
-    return (row + col) * 0.05; // 50ms delay between each diagonal
+    return (row + col) * 0.05;
   };
 
   return (
@@ -105,9 +200,9 @@ export default function Home() {
         </button>
       </div>
       <div className="grid grid-cols-12 gap-2 max-w-6xl mx-auto">
-        {gridImages.map((image, index) => (
+        {gridBottlecaps.map((bottlecap, index) => (
           <motion.div
-            key={index}
+            key={`${bottlecap.id}-${index}`}
             className="aspect-square relative cursor-pointer"
             onContextMenu={(e) => handleContextMenu(e, index)}
             onClick={() => handleClick(index)}
@@ -132,8 +227,8 @@ export default function Home() {
               }}
             >
               <Image
-                src={`/images/${image}`}
-                alt={`Grid image ${index + 1}`}
+                src={`/images/${bottlecap.frontImage}`}
+                alt={`${bottlecap.color} bottlecap front`}
                 fill
                 className="object-contain"
               />
@@ -153,7 +248,12 @@ export default function Home() {
                 textAlign: "center",
               }}
             >
-              <span className="text-gray-500">Flipped!</span>
+              <Image
+                src={`/images/${bottlecap.backImage}`}
+                alt={`${bottlecap.color} bottlecap back`}
+                fill
+                className="object-contain"
+              />
             </motion.div>
           </motion.div>
         ))}
@@ -198,8 +298,8 @@ export default function Home() {
                     <>
                       <div className="relative w-48 h-48 mx-auto mb-4">
                         <Image
-                          src={`/images/${gridImages[selectedIndex]}`}
-                          alt={`Bottlecap ${selectedIndex + 1}`}
+                          src={`/images/${gridBottlecaps[selectedIndex].frontImage}`}
+                          alt={`${gridBottlecaps[selectedIndex].color} bottlecap`}
                           fill
                           className="object-contain"
                         />
@@ -208,11 +308,14 @@ export default function Home() {
                         as="h3"
                         className="text-lg font-medium leading-6 text-gray-900 mb-2"
                       >
-                        Color Fun Fact
+                        {gridBottlecaps[selectedIndex].color} Bottlecap
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          {funFacts[selectedIndex % funFacts.length]}
+                        <p className="text-sm text-gray-500 mb-4">
+                          {gridBottlecaps[selectedIndex].description}
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          <span className="font-medium">Fun Fact:</span> {gridBottlecaps[selectedIndex].funFact}
                         </p>
                       </div>
 
