@@ -47,6 +47,7 @@ export default function Home() {
   const gridImages = Array.from({ length: 144 }, (_, index) => images[index % images.length]);
   const [flippedStates, setFlippedStates] = useState<boolean[]>(Array(144).fill(false));
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
     e.preventDefault();
@@ -59,6 +60,16 @@ export default function Home() {
 
   const handleClick = (index: number) => {
     setSelectedIndex(index);
+    setIsClosing(false);
+  };
+
+  const handleClose = () => {
+    setIsClosing(true);
+  };
+
+  const handleAfterLeave = () => {
+    setSelectedIndex(null);
+    setIsClosing(false);
   };
 
   return (
@@ -117,11 +128,16 @@ export default function Home() {
         ))}
       </div>
 
-      <Transition appear show={selectedIndex !== null} as={Fragment}>
+      <Transition
+        appear
+        show={selectedIndex !== null && !isClosing}
+        as={Fragment}
+        afterLeave={handleAfterLeave}
+      >
         <Dialog
           as="div"
           className="relative z-50"
-          onClose={() => setSelectedIndex(null)}
+          onClose={handleClose}
         >
           <Transition.Child
             as={Fragment}
@@ -173,7 +189,7 @@ export default function Home() {
                         <button
                           type="button"
                           className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                          onClick={() => setSelectedIndex(null)}
+                          onClick={handleClose}
                         >
                           Close
                         </button>
