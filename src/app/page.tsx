@@ -43,11 +43,11 @@ const funFacts = [
 ];
 
 export default function Home() {
-  // Create an array of 144 items (12x12) by repeating the images
   const gridImages = Array.from({ length: 144 }, (_, index) => images[index % images.length]);
   const [flippedStates, setFlippedStates] = useState<boolean[]>(Array(144).fill(false));
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isFlippingAll, setIsFlippingAll] = useState(false);
 
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
     e.preventDefault();
@@ -72,8 +72,38 @@ export default function Home() {
     setIsClosing(false);
   };
 
+  const handleFlipAll = () => {
+    setIsFlippingAll(true);
+    const newStates = [...flippedStates];
+    const allFlipped = newStates.every(state => state);
+
+    // Flip all tiles to the opposite state
+    for (let i = 0; i < newStates.length; i++) {
+      newStates[i] = !allFlipped;
+    }
+
+    setFlippedStates(newStates);
+    setTimeout(() => setIsFlippingAll(false), 1000); // Reset after animation completes
+  };
+
+  // Calculate delay based on position in the grid
+  const getDelay = (index: number) => {
+    const row = Math.floor(index / 12);
+    const col = index % 12;
+    return (row + col) * 0.05; // 50ms delay between each diagonal
+  };
+
   return (
     <div className="min-h-screen p-8">
+      <div className="max-w-6xl mx-auto mb-8">
+        <button
+          onClick={handleFlipAll}
+          disabled={isFlippingAll}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {isFlippingAll ? 'Flipping...' : 'Flip All'}
+        </button>
+      </div>
       <div className="grid grid-cols-12 gap-2 max-w-6xl mx-auto">
         {gridImages.map((image, index) => (
           <motion.div
@@ -86,7 +116,8 @@ export default function Home() {
             }}
             transition={{
               duration: 0.6,
-              ease: "easeInOut"
+              ease: "easeInOut",
+              delay: isFlippingAll ? getDelay(index) : 0
             }}
             style={{
               transformStyle: "preserve-3d",
