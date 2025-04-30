@@ -42,7 +42,7 @@ export default function Home() {
         {gridImages.map((image, index) => (
           <motion.div
             key={index}
-            className="aspect-square relative"
+            className="aspect-square relative cursor-pointer"
             onContextMenu={(e) => handleContextMenu(e, index)}
             animate={{
               rotateY: flippedStates[index] ? 180 : 0,
